@@ -36,7 +36,7 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
-total_price = 0
+subtotal_price = 0
 selected_ids = []
 
 while True:
@@ -46,14 +46,43 @@ while True:
     else:
         selected_ids.append(selected_id)
      
+# receipt formatting
+print("-----------------------------")
+print("THE NOT-SO-HOYA SNAXA")
+print("www.thenotsohoyasnaxa.com")
+print("-----------------------------")
 
+# displaying current date and time, https://www.programiz.com/python-programming/datetime/current-datetime
+from datetime import datetime
 
+now = datetime.now()
+ 
+dt_string = now.strftime("%m/%d/%y %H:%M:%S")
+print("CHECKOUT AT:", dt_string)
+print("-----------------------------")
+print("SELECTED PRODUCTS:")
+
+# shopping cart items 
 
 for selected_id in selected_ids:
     matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
     matching_product = matching_products[0]
-    total_price = total_price + matching_product["price"]
-    print("SELECTED PRODUCT: ",matching_product["name"], matching_product["price"])
-        
-print ("TOTAL PRICE:", to_usd(total_price))
+    subtotal_price = subtotal_price + matching_product["price"]
+    print("... ",matching_product["name"], "(" + str(to_usd(matching_product["price"])) + ")")
+
+
+# subtotal, tax, total
+
+
+
+tax = subtotal_price * 0.0875
+total = subtotal_price + tax
+
+print("-----------------------------") 
+print ("SUBTOTAL:", to_usd(subtotal_price))
+print ("TAX:", to_usd(tax))
+print ("TOTAL:", to_usd(total))
+print("-----------------------------")
+print("THANKS, SEE YOU AGAIN SOON!")
+print("-----------------------------") 
 
