@@ -36,6 +36,7 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
+#################### product input 
 subtotal_price = 0
 selected_ids = []
 
@@ -46,13 +47,13 @@ while True:
     else:
         selected_ids.append(selected_id)
      
-# receipt formatting
+#################### receipt formatting
 print("-----------------------------")
 print("THE NOT-SO-HOYA SNAXA")
 print("www.thenotsohoyasnaxa.com")
 print("-----------------------------")
 
-# displaying current date and time, https://www.programiz.com/python-programming/datetime/current-datetime
+#################### displaying current date and time, https://www.programiz.com/python-programming/datetime/current-datetime
 from datetime import datetime
 
 now = datetime.now()
@@ -62,7 +63,7 @@ print("CHECKOUT AT:", dt_string)
 print("-----------------------------")
 print("SELECTED PRODUCTS:")
 
-# shopping cart items 
+#################### shopping cart items 
 
 for selected_id in selected_ids:
     matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
@@ -71,18 +72,26 @@ for selected_id in selected_ids:
     print("... ",matching_product["name"], "(" + str(to_usd(matching_product["price"])) + ")")
 
 
-# subtotal, tax, total
+#################### subtotal, tax, total
+
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
+tax_rate = (os.getenv("TAX_RATE", default = 0.0875))
+print(tax_rate)
 
-tax = subtotal_price * 0.0875
+tax = subtotal_price * float(tax_rate)
 total = subtotal_price + tax
 
+#################### END OF RECEIPT
 print("-----------------------------") 
 print ("SUBTOTAL:", to_usd(subtotal_price))
 print ("TAX:", to_usd(tax))
 print ("TOTAL:", to_usd(total))
 print("-----------------------------")
 print("THANKS, SEE YOU AGAIN SOON!")
-print("-----------------------------") 
+print("-----------------------------")
 
