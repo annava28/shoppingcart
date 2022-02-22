@@ -1,3 +1,6 @@
+#REMOVING DS STORE FILE ACCORDING TO: https://stackoverflow.com/questions/107701/how-can-i-remove-ds-store-files-from-a-git-repository
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
