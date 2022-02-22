@@ -44,6 +44,8 @@ while True:
     selected_id = input("Please input a product identifier: ")
     if selected_id == "DONE" or selected_id == "done" or selected_id == "Done":
         break
+    elif int(selected_id) > len(products) or int(selected_id) < 0: #I got this idea from a student during office hours on 2/21
+        print("Oops! Please select a correct product indentifier")
     else:
         selected_ids.append(selected_id)
      
@@ -81,12 +83,11 @@ load_dotenv()
 
 
 tax_rate = (os.getenv("TAX_RATE", default = 0.0875))
-print(tax_rate)
 
 tax = subtotal_price * float(tax_rate)
 total = subtotal_price + tax
 
-#################### END OF RECEIPT
+#################### end of receipt
 print("-----------------------------") 
 print ("SUBTOTAL:", to_usd(subtotal_price))
 print ("TAX:", to_usd(tax))
@@ -94,4 +95,53 @@ print ("TOTAL:", to_usd(total))
 print("-----------------------------")
 print("THANKS, SEE YOU AGAIN SOON!")
 print("-----------------------------")
+
+#################### e-mail
+receipt = input("Would you like your receipt emailed to you? Yes / No ")
+
+if receipt == "No" or receipt == "NO" or receipt == "no":
+    print("Ok! Your receipt will not be emailed. Please refer to the above for your records.")
+elif receipt == "Yes" or receipt == "YES" or receipt == "yes":
+
+    from sendgrid import SendGridAPIClient
+    from sendgrid.helpers.mail import Mail
+
+    load_dotenv()
+
+    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+    SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+
+    client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+    print("CLIENT:", type(client))
+
+    subject = "Your Receipt from The Not-So-Hoya Snaxa"
+
+#source for how to reference a variable in HTML https://anvil.works/forum/t/how-to-add-a-python-variable-in-html-text-email/5323
+    html_content = f"""
+        <h1> Not-So-Hoya Snaxa Receipt </h1>
+        <h3> Date: {dt_string}  <h/2> 
+        <h3> Subtotal: {to_usd(subtotal_price)} <h/2>
+        <h3> Tax: {to_usd(tax)} <h/3>
+        <h2> Total: {to_usd(total)}
+        <h3> Thank you for shopping at Not-So-Hoya Snaxa! Please come again soon! <h/3> 
+        """
+
+    print("HTML:", html_content)
+
+    message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS, subject=subject, html_content=html_content)
+
+    try:
+        response = client.send(message)
+
+        print("RESPONSE:", type(response)) 
+        print(response.status_code) 
+        print(response.body)
+        print(response.headers)
+
+    except Exception as err:
+        print(type(err))
+        print(err)
+else:
+    "Oops! Please enter yes or no."
+
 

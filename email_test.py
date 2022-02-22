@@ -11,7 +11,7 @@ SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var c
 client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
 print("CLIENT:", type(client))
 
-subject = "Your Receipt from the Green Grocery Store"
+subject = "Your Receipt from The Not-So-Hoya Snaxa"
 
 html_content = "Hello World"
 print("HTML:", html_content)
